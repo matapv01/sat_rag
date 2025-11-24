@@ -1,20 +1,20 @@
 import torch
-import torch.nn as nn
-from torch_geometric.nn import GCNConv, global_mean_pool
+from torch import nn
+from torch_geometric.nn import GCNConv, GATConv
 
 class GraphEncoder(nn.Module):
-    def __init__(self, in_dim=128, hidden_dim=256, out_dim=256, num_layers=2):
+    def __init__(self, in_dim=128, hidden_dim=256, out_dim=256, pretrained_path=None):
         super().__init__()
-        self.convs = nn.ModuleList()
-        self.convs.append(GCNConv(in_dim, hidden_dim))
-        for _ in range(num_layers-2):
-            self.convs.append(GCNConv(hidden_dim, hidden_dim))
-        self.convs.append(GCNConv(hidden_dim, out_dim))
-        self.activation = nn.ReLU()
+        self.conv1 = GCNConv(in_dim, hidden_dim)
+        self.conv2 = GCNConv(hidden_dim, out_dim)
+        self.relu = nn.ReLU()
 
-    def forward(self, x, edge_index, batch=None):
-        for conv in self.convs:
-            x = self.activation(conv(x, edge_index))
-        if batch is not None:
-            x = global_mean_pool(x, batch)
-        return x
+        if pretrained_path:
+            state_dict = torch.load(pretrained_path, map_location="cpu")
+            self.load_state_dict(state_dict)
+            print(f"Loaded pretrained GNN from {pretrained_path}")
+
+    def forward(self, x, edge_index):
+        h = self.relu(self.conv1(x, edge_index))
+        h = self.conv2(h, edge_index)
+        return h
