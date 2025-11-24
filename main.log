@@ -1,0 +1,10 @@
+nohup: ignoring input
+[2025-11-24 10:36:23] Using device: cpu
+[2025-11-24 10:36:24] Loaded KG: 272115 train triples, 20466 test triples, 14534 entities
+[2025-11-24 10:36:27] Dataloader created: 8504 batches
+[2025-11-24 10:36:27] --- Mode 1: Pretrained only ---
+[2025-11-24 10:37:11] Pretrained metrics: {'MRR': 0.1304319375400172, 'Hits@1': 0.034423828125, 'Hits@3': 0.09914822048611112, 'Hits@10': 0.31393229166666664}
+[2025-11-24 10:37:11] --- Mode 2: Train HKA only ---
+[2025-11-24 10:37:11] === Epoch 1 ===
+[2025-11-24 10:39:44] [Batch 100/8504] Loss=3.4986 Device=cpu
+[2025-11-24 10:42:17] [Batch 200/8504] Loss=3.4486 Device=cpu

@@ -1,5 +1,9 @@
 import torch
 import torch.nn.functional as F
+import time
+
+def log(msg):
+    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {msg}", flush=True)
 
 def compute_similarity_matrix(H, D, tau=0.07):
     H = F.normalize(H, p=2, dim=1)
@@ -23,7 +27,7 @@ def global_alignment_loss(subgraph_emb, doc_emb, tau=0.07):
     return 0.5 * (loss_i + loss_j)
 
 def train_hka(graph_encoder, text_encoder, dataloader, optimizer, device, adapter,
-              text_adapter=None, id2entity=None, tau=0.07):
+              text_adapter=None, id2entity=None, tau=0.07, log_interval=50):
     """Train HKA and return avg loss (optionally with optimizer)."""
     graph_encoder.train()
     adapter.train()
@@ -47,7 +51,7 @@ def train_hka(graph_encoder, text_encoder, dataloader, optimizer, device, adapte
         entity_names = [text_encoder.entity2text[id2entity[batch["head"][j].item()]]
                         for j in range(len(batch["head"]))]
         text_emb = text_encoder.encode(entity_names).to(device)
-        if text_adapter and optimizer:  # chỉ dùng adapter khi train
+        if text_adapter and optimizer:
             text_emb = text_adapter(text_emb)
 
         # Loss
@@ -63,8 +67,11 @@ def train_hka(graph_encoder, text_encoder, dataloader, optimizer, device, adapte
 
         total_loss += L_HKA.item()
 
-        if i % 100 == 0:
-            print(f"Batch {i+1}/{len(dataloader)} "
-                  f"({i/len(dataloader)*100:.1f}%), Loss={L_HKA.item():.4f}")
+        if (i+1) % log_interval == 0:
+            log(f"[Batch {i+1}/{len(dataloader)}] "
+                f"Loss={L_HKA.item():.4f} "
+                f"Device={device}")
 
-    return total_loss / len(dataloader)
+    avg_loss = total_loss / len(dataloader)
+    log(f"Avg loss: {avg_loss:.4f} on device {device}")
+    return avg_loss

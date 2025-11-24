@@ -1,7 +1,7 @@
-# main.py
 import torch
 from torch.utils.data import DataLoader
 from torch import optim, nn
+import time
 
 from src.data_loader import FB15K237Graph, LocalAlignmentDataset
 from src.graph_encoder import GraphEncoder
@@ -10,13 +10,18 @@ from src.hka_trainer import train_hka
 from src.knowledge_adapter import KnowledgeAdapter
 from src.metrics import evaluate_retrieval
 
+def log(msg):
+    # log với timestamp
+    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {msg}", flush=True)
+
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    log(f"Using device: {device}")
 
     # --- Load KG ---
     graph_obj = FB15K237Graph(data_dir="data/fb15k237")
-    print(f"Loaded KG: {len(graph_obj.train_triples)} train triples, "
-          f"{len(graph_obj.test_triples)} test triples, {len(graph_obj.entities)} entities")
+    log(f"Loaded KG: {len(graph_obj.train_triples)} train triples, "
+        f"{len(graph_obj.test_triples)} test triples, {len(graph_obj.entities)} entities")
 
     edges = [[graph_obj.entity2id[h], graph_obj.entity2id[t]] for h,r,t in graph_obj.train_triples]
     edge_index = torch.tensor(edges, dtype=torch.long).t().contiguous()
@@ -30,15 +35,15 @@ def main():
 
     # --- Text Encoder + projection ---
     text_encoder = TextEncoder(entity2text=graph_obj.entity2text)
-    text_adapter = nn.Linear(384, 256).to(device)  # tùy mô hình sentence-transformer
+    text_adapter = nn.Linear(384, 256).to(device)
 
     # --- Dataset & Dataloader ---
     dataset = LocalAlignmentDataset(graph_obj)
     dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
-    print(f"Dataloader created: {len(dataloader)} batches")
+    log(f"Dataloader created: {len(dataloader)} batches")
 
     # --- Mode 1: Pretrained only ---
-    print("\n--- Mode 1: Pretrained only ---")
+    log("--- Mode 1: Pretrained only ---")
     for param in graph_encoder.parameters():
         param.requires_grad = False
     for param in text_encoder.encoder.parameters():
@@ -48,15 +53,14 @@ def main():
     for param in text_adapter.parameters():
         param.requires_grad = False
 
-    # Chỉ tính metric, không train
     metrics = evaluate_retrieval(graph_encoder, text_encoder, graph_obj.test_triples,
                                  id2entity=graph_obj.id2entity, entity2id=graph_obj.entity2id,
                                  adapter=adapter, text_adapter=text_adapter,
                                  device=device, batch_size=32)
-    print(f"Pretrained metrics: {metrics}")
+    log(f"Pretrained metrics: {metrics}")
 
-    # --- Mode 2: Train HKA only (freeze adapters) ---
-    print("\n--- Mode 2: Train HKA only ---")
+    # --- Mode 2: Train HKA only ---
+    log("--- Mode 2: Train HKA only ---")
     for param in adapter.parameters():
         param.requires_grad = False
     for param in text_adapter.parameters():
@@ -69,17 +73,18 @@ def main():
     optimizer_hka = optim.Adam(list(graph_encoder.parameters()) + list(text_encoder.encoder.parameters()), lr=1e-4)
 
     for epoch in range(5):
-        print(f"\n=== Epoch {epoch+1} ===")
-        loss, _ = train_hka(graph_encoder, text_encoder, dataloader, optimizer_hka,
-                            device, adapter, text_adapter=text_adapter, id2entity=graph_obj.id2entity)
+        log(f"=== Epoch {epoch+1} ===")
+        loss = train_hka(graph_encoder, text_encoder, dataloader, optimizer_hka,
+                         device, adapter, text_adapter=text_adapter, id2entity=graph_obj.id2entity,
+                         log_interval=100)
         metrics = evaluate_retrieval(graph_encoder, text_encoder, graph_obj.test_triples,
                                      id2entity=graph_obj.id2entity, entity2id=graph_obj.entity2id,
                                      adapter=adapter, text_adapter=text_adapter,
                                      device=device, batch_size=32)
-        print(f"HKA only metrics: {metrics}, loss={loss:.4f}")
+        log(f"HKA only metrics: {metrics}, loss={loss:.4f}")
 
-    # --- Mode 3: Train Adapter only (freeze encoders) ---
-    print("\n--- Mode 3: Train Adapter only ---")
+    # --- Mode 3: Train Adapter only ---
+    log("--- Mode 3: Train Adapter only ---")
     for param in graph_encoder.parameters():
         param.requires_grad = False
     for param in text_encoder.encoder.parameters():
@@ -92,17 +97,18 @@ def main():
     optimizer_adapter = optim.Adam(list(adapter.parameters()) + list(text_adapter.parameters()), lr=1e-4)
 
     for epoch in range(5):
-        print(f"\n=== Epoch {epoch+1} ===")
-        loss, _ = train_hka(graph_encoder, text_encoder, dataloader, optimizer_adapter,
-                            device, adapter, text_adapter=text_adapter, id2entity=graph_obj.id2entity)
+        log(f"=== Epoch {epoch+1} ===")
+        loss = train_hka(graph_encoder, text_encoder, dataloader, optimizer_adapter,
+                         device, adapter, text_adapter=text_adapter, id2entity=graph_obj.id2entity,
+                         log_interval=100)
         metrics = evaluate_retrieval(graph_encoder, text_encoder, graph_obj.test_triples,
                                      id2entity=graph_obj.id2entity, entity2id=graph_obj.entity2id,
                                      adapter=adapter, text_adapter=text_adapter,
                                      device=device, batch_size=32)
-        print(f"Adapter only metrics: {metrics}, loss={loss:.4f}")
+        log(f"Adapter only metrics: {metrics}, loss={loss:.4f}")
 
-    # --- Mode 4: Train HKA + Adapter (all trainable) ---
-    print("\n--- Mode 4: Train HKA + Adapter ---")
+    # --- Mode 4: Train HKA + Adapter ---
+    log("--- Mode 4: Train HKA + Adapter ---")
     for param in graph_encoder.parameters():
         param.requires_grad = True
     for param in text_encoder.encoder.parameters():
@@ -118,15 +124,15 @@ def main():
                                list(text_adapter.parameters()), lr=1e-4)
 
     for epoch in range(5):
-        print(f"\n=== Epoch {epoch+1} ===")
-        loss, _ = train_hka(graph_encoder, text_encoder, dataloader, optimizer_all,
-                            device, adapter, text_adapter=text_adapter, id2entity=graph_obj.id2entity)
+        log(f"=== Epoch {epoch+1} ===")
+        loss = train_hka(graph_encoder, text_encoder, dataloader, optimizer_all,
+                         device, adapter, text_adapter=text_adapter, id2entity=graph_obj.id2entity,
+                         log_interval=100)
         metrics = evaluate_retrieval(graph_encoder, text_encoder, graph_obj.test_triples,
                                      id2entity=graph_obj.id2entity, entity2id=graph_obj.entity2id,
                                      adapter=adapter, text_adapter=text_adapter,
                                      device=device, batch_size=32)
-        print(f"HKA + Adapter metrics: {metrics}, loss={loss:.4f}")
-
+        log(f"HKA + Adapter metrics: {metrics}, loss={loss:.4f}")
 
 if __name__ == "__main__":
     main()
