@@ -1,12 +1,4 @@
-torch>=2.1
-transformers>=4.40
-sentence-transformers>=2.2
-torch-geometric
-networkx
 faiss-cpu
-pyyaml
 rdflib
 peft
-tqdm
-wrapt
-datasets
+torch_geometric
