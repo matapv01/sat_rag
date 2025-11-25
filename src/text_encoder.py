@@ -1,5 +1,5 @@
 from transformers import AutoModel, AutoTokenizer
-
+from torch import nn
 class TextEncoderPretrained(nn.Module):
     def __init__(self, model_name="sentence-transformers/all-MiniLM-L6-v2", entity2text=None):
         super().__init__()

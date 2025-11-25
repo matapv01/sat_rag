@@ -4,8 +4,8 @@ from torch import optim, nn
 import time
 
 from src.data_loader import FB15K237Graph, LocalAlignmentDataset
-from src.graph_encoder import GraphTransformerEncoder
-from src.text_encoder import TextEncoder
+from src.graph_encoder import GraphormerEncoder
+from src.text_encoder import TextEncoderPretrained
 from src.hka_trainer import train_hka
 from src.knowledge_adapter import KnowledgeAdapter
 from src.metrics import evaluate_retrieval
@@ -37,10 +37,10 @@ def main():
     node_feats = torch.randn(len(graph_obj.entities), 128)
 
     # --- Graph Encoder + Adapter ---
-    graph_encoder = GraphTransformerEncoder(
-        in_dim=128, hidden_dim=128, out_dim=128, n_heads=4, n_layers=2,
-        dropout=0.1,
-        pretrained_path="pretrained_graph_transformer.pth"
+    graph_encoder = GraphormerEncoder(
+        model_name="clefourrier/graphormer-base-pcqm4mv2",
+        use_pretrained=True,
+        device=device
     ).to(device)
     graph_encoder.node_feats = node_feats
     graph_encoder.edge_index = edge_index

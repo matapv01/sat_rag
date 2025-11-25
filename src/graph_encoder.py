@@ -1,60 +1,65 @@
+# graphormer_encoder.py
 import torch
 from torch import nn
-from torch_geometric.nn import TransformerConv
+from transformers import GraphormerModel
 
-class GraphTransformerEncoder(nn.Module):
-    def __init__(self, in_dim=128, hidden_dim=128, out_dim=128,
-                 n_heads=4, n_layers=2, dropout=0.1, pretrained_path=None,
-                 use_lambdaKG=False):
+class GraphormerEncoder(nn.Module):
+    def __init__(self, model_name="clefourrier/graphormer-base-pcqm4mv2",
+                 use_pretrained=True, device="cpu"):
         """
-        Graph Transformer encoder:
-        - Nếu use_lambdaKG=True, chỉ load pre-trained node embeddings
-        - Nếu use_lambdaKG=False, tạo TransformerConv layers
+        Graphormer encoder cho HKA
+        - model_name: HF checkpoint
+        - use_pretrained: nếu True sẽ load pretrained HF weights
         """
         super().__init__()
-        self.use_lambdaKG = use_lambdaKG
-        if use_lambdaKG:
-            # placeholder, sẽ load LambdaKG embeddings external
-            self.embeddings = None
+        self.device = device
+        self.use_pretrained = use_pretrained
+
+        if use_pretrained:
+            try:
+                self.model = GraphormerModel.from_pretrained(model_name)
+                print(f"[GraphormerEncoder] Loaded pretrained weights from {model_name}")
+            except Exception as e:
+                print(f"[GraphormerEncoder] Failed to load pretrained: {e}, fallback to random init")
+                self.model = GraphormerModel.from_config(self._default_config())
         else:
-            self.n_layers = n_layers
-            self.dropout = nn.Dropout(dropout)
-            self.relu = nn.ReLU()
-            self.layers = nn.ModuleList()
+            self.model = GraphormerModel.from_config(self._default_config())
 
-            # first layer
-            self.layers.append(TransformerConv(in_dim, hidden_dim // n_heads, heads=n_heads))
-            # hidden layers
-            for _ in range(n_layers - 2):
-                self.layers.append(TransformerConv(hidden_dim, hidden_dim // n_heads, heads=n_heads))
-            # last layer
-            self.layers.append(TransformerConv(hidden_dim, out_dim // n_heads, heads=n_heads))
+        self.model.to(device)
+        self.model.eval()  # default pretrained only
 
-            # load pretrained nếu có
-            if pretrained_path:
-                try:
-                    state_dict = torch.load(pretrained_path, map_location="cpu")
-                    self.load_state_dict(state_dict, strict=False)
-                    print(f"[GraphTransformerEncoder] Loaded pretrained weights from {pretrained_path}")
-                except Exception as e:
-                    print(f"[GraphTransformerEncoder] Failed to load pretrained weights: {e}")
+    def _default_config(self):
+        from transformers import GraphormerConfig
+        return GraphormerConfig(
+            hidden_size=128,
+            num_attention_heads=4,
+            num_encoder_layers=2,
+        )
 
-    def forward(self, x, edge_index=None):
-        if self.use_lambdaKG:
-            # x = pre-loaded LambdaKG embeddings tensor
-            return self.embeddings
-        else:
-            h = x
-            for i, layer in enumerate(self.layers):
-                h = layer(h, edge_index)
-                if i < self.n_layers - 1:
-                    h = self.relu(h)
-                    h = self.dropout(h)
-            return h
+    def forward(self, node_feat, edge_index=None):
+        """
+        node_feat: [num_nodes, feat_dim]
+        edge_index: [2, num_edges], optional
+        """
+        # HF Graphormer nhận input dạng dict
+        inputs = {"node_feat": node_feat.to(self.device)}
+        if edge_index is not None:
+            inputs["attn_edge_type"] = None
+            inputs["edge_input"] = edge_index.to(self.device)
+
+        out = self.model(**inputs)
+        return out.last_hidden_state  # [num_nodes, hidden_dim]
 
     def load_lambdaKG_embeddings(self, embeddings_tensor):
         """
-        embeddings_tensor: [num_nodes, emb_dim]
+        Nếu muốn dùng LambdaKG embeddings, override forward()
         """
-        self.embeddings = embeddings_tensor
-        print(f"[GraphTransformerEncoder] LambdaKG embeddings loaded: {embeddings_tensor.shape}")
+        self.lambdaKG_embeddings = embeddings_tensor.to(self.device)
+        self.use_lambdaKG = True
+        print(f"[GraphormerEncoder] LambdaKG embeddings loaded: {embeddings_tensor.shape}")
+
+    def forward_lambdaKG(self):
+        if hasattr(self, "lambdaKG_embeddings"):
+            return self.lambdaKG_embeddings
+        else:
+            raise ValueError("LambdaKG embeddings not loaded")
