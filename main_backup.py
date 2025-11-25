@@ -48,7 +48,10 @@ def main():
     adapter = KnowledgeAdapter(in_dim=128, hidden_dim=64, out_dim=128).to(device)
 
     # --- Text Encoder + Adapter ---
-    text_encoder = TextEncoderPretrained(entity2text=graph_obj.entity2text).to(device)
+    text_encoder = TextEncoder(entity2text=graph_obj.entity2text,
+                               vocab_size=30522, hidden_dim=128, n_layers=2,
+                               n_heads=4, dropout=0.1,
+                               pretrained_path="pretrained_text_encoder.pth")
     text_adapter = nn.Sequential(
         nn.Linear(128, 64),
         nn.ReLU(),

@@ -1,21 +1,18 @@
-import torch
-from torch import nn
-from sentence_transformers import SentenceTransformer
+from transformers import AutoModel, AutoTokenizer
 
-class TextEncoder(nn.Module):
-    def __init__(self, entity2text=None, model_name="all-MiniLM-L6-v2"):
+class TextEncoderPretrained(nn.Module):
+    def __init__(self, model_name="sentence-transformers/all-MiniLM-L6-v2", entity2text=None):
         super().__init__()
-        self.encoder = SentenceTransformer(model_name)
         self.entity2text = entity2text or {}
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        self.model = AutoModel.from_pretrained(model_name)
 
-    def encode(self, texts):
-        # Returns torch.Tensor [batch, dim]
-        embeddings = self.encoder.encode(
-            texts, convert_to_tensor=True, show_progress_bar=False
-        )
-        return embeddings
+    def encode(self, texts, device="cpu"):
+        inputs = self.tokenizer(texts, padding=True, truncation=True, return_tensors="pt").to(device)
+        outputs = self.model(**inputs)
+        # mean pooling over last hidden state
+        emb = outputs.last_hidden_state.mean(dim=1)
+        return emb
 
     def get_text(self, entity_id):
-        if entity_id not in self.entity2text:
-            raise ValueError(f"entity {entity_id} missing in entity2text mapping")
         return self.entity2text[entity_id]

@@ -1,0 +1,113 @@
+nohup: ignoring input
+2025-11-25 07:57:45.216573: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1764057465.238061    3132 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1764057465.244525    3132 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-11-25 07:57:45.266597: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+[2025-11-25 07:57:51] Using device: cuda
+[2025-11-25 07:57:51] Loaded KG: 272115 train triples, 20466 test triples, 14534 entities
+/usr/local/lib/python3.11/dist-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+/usr/local/lib/python3.11/dist-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+  warnings.warn(
+[2025-11-25 07:57:57] Dataloader created: 8504 batches
+[2025-11-25 07:57:57] --- Mode 1: Pretrained only ---
+[2025-11-25 07:58:04] Pretrained metrics: {'MRR': 0.12358903075212332, 'Hits@1': 0.027392578125, 'Hits@3': 0.08937174479166667, 'Hits@10': 0.31195203993055554}
+[2025-11-25 07:58:04] --- Mode 2: Train HKA only ---
+[2025-11-25 07:58:04] === Epoch 1 ===
+[2025-11-25 07:58:08] [Batch 100/8504] Loss=3.4649 Device=cuda
+[2025-11-25 07:58:12] [Batch 200/8504] Loss=3.4432 Device=cuda
+[2025-11-25 07:58:16] [Batch 300/8504] Loss=3.4686 Device=cuda
+[2025-11-25 07:58:20] [Batch 400/8504] Loss=3.4733 Device=cuda
+[2025-11-25 07:58:24] [Batch 500/8504] Loss=3.4455 Device=cuda
+[2025-11-25 07:58:28] [Batch 600/8504] Loss=3.4578 Device=cuda
+[2025-11-25 07:58:31] [Batch 700/8504] Loss=3.4556 Device=cuda
+[2025-11-25 07:58:35] [Batch 800/8504] Loss=3.4562 Device=cuda
+[2025-11-25 07:58:39] [Batch 900/8504] Loss=3.4655 Device=cuda
+[2025-11-25 07:58:43] [Batch 1000/8504] Loss=3.4342 Device=cuda
+[2025-11-25 07:58:47] [Batch 1100/8504] Loss=3.4388 Device=cuda
+[2025-11-25 07:58:51] [Batch 1200/8504] Loss=3.4159 Device=cuda
+[2025-11-25 07:58:55] [Batch 1300/8504] Loss=3.4079 Device=cuda
+[2025-11-25 07:58:59] [Batch 1400/8504] Loss=3.4005 Device=cuda
+[2025-11-25 07:59:02] [Batch 1500/8504] Loss=3.3606 Device=cuda
+[2025-11-25 07:59:06] [Batch 1600/8504] Loss=3.3841 Device=cuda
+[2025-11-25 07:59:10] [Batch 1700/8504] Loss=3.3987 Device=cuda
+[2025-11-25 07:59:14] [Batch 1800/8504] Loss=3.4109 Device=cuda
+[2025-11-25 07:59:18] [Batch 1900/8504] Loss=3.3860 Device=cuda
+[2025-11-25 07:59:22] [Batch 2000/8504] Loss=3.3896 Device=cuda
+[2025-11-25 07:59:26] [Batch 2100/8504] Loss=3.3664 Device=cuda
+[2025-11-25 07:59:29] [Batch 2200/8504] Loss=3.3628 Device=cuda
+[2025-11-25 07:59:33] [Batch 2300/8504] Loss=3.3645 Device=cuda
+[2025-11-25 07:59:37] [Batch 2400/8504] Loss=3.3689 Device=cuda
+[2025-11-25 07:59:41] [Batch 2500/8504] Loss=3.3886 Device=cuda
+[2025-11-25 07:59:45] [Batch 2600/8504] Loss=3.3290 Device=cuda
+[2025-11-25 07:59:49] [Batch 2700/8504] Loss=3.3923 Device=cuda
+[2025-11-25 07:59:53] [Batch 2800/8504] Loss=3.3487 Device=cuda
+[2025-11-25 07:59:56] [Batch 2900/8504] Loss=3.4167 Device=cuda
+[2025-11-25 08:00:00] [Batch 3000/8504] Loss=3.3875 Device=cuda
+[2025-11-25 08:00:04] [Batch 3100/8504] Loss=3.3786 Device=cuda
+[2025-11-25 08:00:08] [Batch 3200/8504] Loss=3.3918 Device=cuda
+[2025-11-25 08:00:12] [Batch 3300/8504] Loss=3.3455 Device=cuda
+[2025-11-25 08:00:16] [Batch 3400/8504] Loss=3.3779 Device=cuda
+[2025-11-25 08:00:20] [Batch 3500/8504] Loss=3.3662 Device=cuda
+[2025-11-25 08:00:24] [Batch 3600/8504] Loss=3.3475 Device=cuda
+[2025-11-25 08:00:27] [Batch 3700/8504] Loss=3.3339 Device=cuda
+[2025-11-25 08:00:31] [Batch 3800/8504] Loss=3.2878 Device=cuda
+[2025-11-25 08:00:35] [Batch 3900/8504] Loss=3.3439 Device=cuda
+[2025-11-25 08:00:39] [Batch 4000/8504] Loss=3.4179 Device=cuda
+[2025-11-25 08:00:43] [Batch 4100/8504] Loss=3.3443 Device=cuda
+[2025-11-25 08:00:47] [Batch 4200/8504] Loss=3.3716 Device=cuda
+[2025-11-25 08:00:51] [Batch 4300/8504] Loss=3.3346 Device=cuda
+[2025-11-25 08:00:54] [Batch 4400/8504] Loss=3.3063 Device=cuda
+[2025-11-25 08:00:58] [Batch 4500/8504] Loss=3.3414 Device=cuda
+[2025-11-25 08:01:02] [Batch 4600/8504] Loss=3.3574 Device=cuda
+[2025-11-25 08:01:06] [Batch 4700/8504] Loss=3.3477 Device=cuda
+[2025-11-25 08:01:10] [Batch 4800/8504] Loss=3.3503 Device=cuda
+[2025-11-25 08:01:14] [Batch 4900/8504] Loss=3.3273 Device=cuda
+[2025-11-25 08:01:18] [Batch 5000/8504] Loss=3.2965 Device=cuda
+[2025-11-25 08:01:22] [Batch 5100/8504] Loss=3.3137 Device=cuda
+[2025-11-25 08:01:25] [Batch 5200/8504] Loss=3.3342 Device=cuda
+[2025-11-25 08:01:29] [Batch 5300/8504] Loss=3.3241 Device=cuda
+[2025-11-25 08:01:33] [Batch 5400/8504] Loss=3.3681 Device=cuda
+[2025-11-25 08:01:37] [Batch 5500/8504] Loss=3.3456 Device=cuda
+[2025-11-25 08:01:41] [Batch 5600/8504] Loss=3.3113 Device=cuda
+[2025-11-25 08:01:45] [Batch 5700/8504] Loss=3.3481 Device=cuda
+[2025-11-25 08:01:49] [Batch 5800/8504] Loss=3.2917 Device=cuda
+[2025-11-25 08:01:52] [Batch 5900/8504] Loss=3.2675 Device=cuda
+[2025-11-25 08:01:56] [Batch 6000/8504] Loss=3.2546 Device=cuda
+[2025-11-25 08:02:00] [Batch 6100/8504] Loss=3.3529 Device=cuda
+[2025-11-25 08:02:04] [Batch 6200/8504] Loss=3.2231 Device=cuda
+[2025-11-25 08:02:08] [Batch 6300/8504] Loss=3.2725 Device=cuda
+[2025-11-25 08:02:12] [Batch 6400/8504] Loss=3.1962 Device=cuda
+[2025-11-25 08:02:16] [Batch 6500/8504] Loss=3.3234 Device=cuda
+[2025-11-25 08:02:20] [Batch 6600/8504] Loss=3.2732 Device=cuda
+[2025-11-25 08:02:24] [Batch 6700/8504] Loss=3.2265 Device=cuda
+[2025-11-25 08:02:27] [Batch 6800/8504] Loss=3.3117 Device=cuda
+[2025-11-25 08:02:31] [Batch 6900/8504] Loss=3.2427 Device=cuda
+[2025-11-25 08:02:35] [Batch 7000/8504] Loss=3.2734 Device=cuda
+[2025-11-25 08:02:39] [Batch 7100/8504] Loss=3.3736 Device=cuda
+[2025-11-25 08:02:43] [Batch 7200/8504] Loss=3.2162 Device=cuda
+[2025-11-25 08:02:47] [Batch 7300/8504] Loss=3.2761 Device=cuda
+[2025-11-25 08:02:51] [Batch 7400/8504] Loss=3.2533 Device=cuda
+[2025-11-25 08:02:55] [Batch 7500/8504] Loss=3.2562 Device=cuda
+[2025-11-25 08:02:59] [Batch 7600/8504] Loss=3.2445 Device=cuda
+[2025-11-25 08:03:03] [Batch 7700/8504] Loss=3.1657 Device=cuda
+[2025-11-25 08:03:07] [Batch 7800/8504] Loss=3.1996 Device=cuda
+[2025-11-25 08:03:10] [Batch 7900/8504] Loss=3.2419 Device=cuda
+[2025-11-25 08:03:14] [Batch 8000/8504] Loss=3.3136 Device=cuda
+[2025-11-25 08:03:18] [Batch 8100/8504] Loss=3.2996 Device=cuda
+[2025-11-25 08:03:22] [Batch 8200/8504] Loss=3.3227 Device=cuda
+[2025-11-25 08:03:26] [Batch 8300/8504] Loss=3.3101 Device=cuda
+[2025-11-25 08:03:30] [Batch 8400/8504] Loss=3.3021 Device=cuda
+[2025-11-25 08:03:34] [Batch 8500/8504] Loss=3.3301 Device=cuda
+[2025-11-25 08:03:34] Avg loss: 3.3479 on device cuda
+[2025-11-25 08:03:42] HKA only metrics: {'MRR': 0.29259181786841776, 'Hits@1': 0.1537814670138889, 'Hits@3': 0.31473524305555556, 'Hits@10': 0.5983723958333333}, loss=3.3479
+[2025-11-25 08:03:42] === Epoch 2 ===
+[2025-11-25 08:03:46] [Batch 100/8504] Loss=3.3101 Device=cuda
+[2025-11-25 08:03:49] [Batch 200/8504] Loss=3.2217 Device=cuda
