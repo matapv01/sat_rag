@@ -3,12 +3,14 @@ from torch.utils.data import DataLoader
 from torch import optim, nn
 import time
 
-from src.data_loader import FB15K237Graph, LocalAlignmentDataset
-from src.graph_encoder import GraphTransformerEncoder
-from src.text_encoder import TextEncoder
-from src.hka_trainer import train_hka
-from src.knowledge_adapter import KnowledgeAdapter
-from src.metrics import evaluate_retrieval
+from src_raw.data_loader import FB15K237Graph, LocalAlignmentDataset
+from src_raw.graph_encoder import GraphTransformerEncoder
+from src_raw.text_encoder import TextEncoder
+from src_raw.hka_trainer import train_hka
+from src_raw.knowledge_adapter import KnowledgeAdapter
+# from src_raw.metrics import evaluate_retrieval
+from src_raw.metrics_new import evaluate_retrieval
+
 
 def log(msg):
     print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {msg}", flush=True)
@@ -51,7 +53,7 @@ def main():
     text_encoder = TextEncoder(entity2text=graph_obj.entity2text,
                                vocab_size=30522, hidden_dim=128, n_layers=2,
                                n_heads=4, dropout=0.1,
-                               pretrained_path="pretrained_text_encoder.pth")
+                               pretrained_path="pretrained_text_encoder.pth", device=device).to(device)
     text_adapter = nn.Sequential(
         nn.Linear(128, 64),
         nn.ReLU(),

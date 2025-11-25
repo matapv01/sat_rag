@@ -4,7 +4,7 @@ from torch import nn
 class TextEncoder(nn.Module):
     def __init__(self, entity2text=None, vocab_size=30522, max_len=64,
                  hidden_dim=128, n_layers=2, n_heads=4, dropout=0.1,
-                 pretrained_path=None):
+                 pretrained_path=None, device="cpu"):
         """
         Vanilla Transformer text encoder chuẩn paper:
         - hidden_dim=128
@@ -24,6 +24,7 @@ class TextEncoder(nn.Module):
             dropout=dropout,
             batch_first=True
         )
+        self.device = device
         self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=n_layers)
         self.dropout = nn.Dropout(dropout)
 
@@ -39,22 +40,22 @@ class TextEncoder(nn.Module):
             except Exception as e:
                 print(f"[TextEncoder] Failed to load pretrained weights: {e}")
 
-    def encode(self, texts, device="cpu"):
+    def encode(self, texts):
         """
         Encode list of texts -> tensor [batch, hidden_dim]
         """
         max_len = self.position_embedding.num_embeddings
         batch_size = len(texts)
-        token_ids = torch.zeros((batch_size, max_len), dtype=torch.long, device=device)
+        token_ids = torch.zeros((batch_size, max_len), dtype=torch.long, device=self.device)
         for i, text in enumerate(texts):
             tokens = text.lower().split()[:max_len]
             token_ids[i, :len(tokens)] = torch.tensor(
                 [hash(tok) % self.token_embedding.num_embeddings for tok in tokens],
-                device=device
+                device=self.device
             )
 
         x = self.token_embedding(token_ids) + self.position_embedding(
-            torch.arange(max_len, device=device)
+            torch.arange(max_len, device=self.device)
         )
         x = self.dropout(x)
 

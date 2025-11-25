@@ -69,7 +69,7 @@ def evaluate_retrieval(
     all_texts = [text_encoder.entity2text[e] for e in all_entities]
 
     with torch.no_grad():
-        text_emb_all = text_encoder.encode(all_texts, device=device)  # [num_entities, text_dim]
+        text_emb_all = text_encoder.encode(all_texts)  # [num_entities, text_dim]
         if text_adapter:
             text_emb_all = text_adapter(text_emb_all)
         text_emb_all = F.normalize(text_emb_all, dim=1)

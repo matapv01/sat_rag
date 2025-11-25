@@ -6,11 +6,6 @@ from transformers import GraphormerModel
 class GraphormerEncoder(nn.Module):
     def __init__(self, model_name="clefourrier/graphormer-base-pcqm4mv2",
                  use_pretrained=True, device="cpu"):
-        """
-        Graphormer encoder cho HKA
-        - model_name: HF checkpoint
-        - use_pretrained: nếu True sẽ load pretrained HF weights
-        """
         super().__init__()
         self.device = device
         self.use_pretrained = use_pretrained
@@ -28,6 +23,9 @@ class GraphormerEncoder(nn.Module):
         self.model.to(device)
         self.model.eval()  # default pretrained only
 
+        self.embeddings = None  # placeholder
+        self.edge_index = None
+
     def _default_config(self):
         from transformers import GraphormerConfig
         return GraphormerConfig(
@@ -36,12 +34,16 @@ class GraphormerEncoder(nn.Module):
             num_encoder_layers=2,
         )
 
-    def forward(self, node_feat, edge_index=None):
+    def forward(self, node_feat=None, edge_index=None):
         """
         node_feat: [num_nodes, feat_dim]
         edge_index: [2, num_edges], optional
         """
-        # HF Graphormer nhận input dạng dict
+        # Nếu đã gán embeddings, trả trực tiếp
+        if self.embeddings is not None:
+            return self.embeddings
+
+        # Ngược lại, forward bình thường
         inputs = {"node_feat": node_feat.to(self.device)}
         if edge_index is not None:
             inputs["attn_edge_type"] = None
@@ -52,14 +54,7 @@ class GraphormerEncoder(nn.Module):
 
     def load_lambdaKG_embeddings(self, embeddings_tensor):
         """
-        Nếu muốn dùng LambdaKG embeddings, override forward()
+        Gán embeddings từ LambdaKG hoặc pretrained.
         """
-        self.lambdaKG_embeddings = embeddings_tensor.to(self.device)
-        self.use_lambdaKG = True
-        print(f"[GraphormerEncoder] LambdaKG embeddings loaded: {embeddings_tensor.shape}")
-
-    def forward_lambdaKG(self):
-        if hasattr(self, "lambdaKG_embeddings"):
-            return self.lambdaKG_embeddings
-        else:
-            raise ValueError("LambdaKG embeddings not loaded")
+        self.embeddings = embeddings_tensor.to(self.device)
+        print(f"[GraphormerEncoder] Embeddings loaded: {embeddings_tensor.shape}")
