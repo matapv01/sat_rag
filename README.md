@@ -8,7 +8,7 @@ nohup python main.py > main.log 2>&1 &
 ```
 cd OpenKG/
 cd openkg/
-``
+```
 ```
 cd ../
 cp examples/train_rotatee_FB15K237_adv.py ./
