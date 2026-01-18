@@ -1,8 +1,12 @@
-# train pipeline: nohup python main.py > main.log 2>&1 &
 
+# train pipeline: 
+```
+nohup python main.py > main.log 2>&1 &
+```
 
 # Pretrained with OpenKG
-```cd OpenKG/
+```
+cd OpenKG/
 cd openkg/
 ``
 ```
