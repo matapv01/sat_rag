@@ -1,113 +1,393 @@
-nohup: ignoring input
-2025-11-25 07:57:45.216573: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:477] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
-WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-E0000 00:00:1764057465.238061    3132 cuda_dnn.cc:8310] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-E0000 00:00:1764057465.244525    3132 cuda_blas.cc:1418] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-2025-11-25 07:57:45.266597: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-[2025-11-25 07:57:51] Using device: cuda
-[2025-11-25 07:57:51] Loaded KG: 272115 train triples, 20466 test triples, 14534 entities
-/usr/local/lib/python3.11/dist-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
-  warnings.warn(
-/usr/local/lib/python3.11/dist-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
-  warnings.warn(
-[2025-11-25 07:57:57] Dataloader created: 8504 batches
-[2025-11-25 07:57:57] --- Mode 1: Pretrained only ---
-[2025-11-25 07:58:04] Pretrained metrics: {'MRR': 0.12358903075212332, 'Hits@1': 0.027392578125, 'Hits@3': 0.08937174479166667, 'Hits@10': 0.31195203993055554}
-[2025-11-25 07:58:04] --- Mode 2: Train HKA only ---
-[2025-11-25 07:58:04] === Epoch 1 ===
-[2025-11-25 07:58:08] [Batch 100/8504] Loss=3.4649 Device=cuda
-[2025-11-25 07:58:12] [Batch 200/8504] Loss=3.4432 Device=cuda
-[2025-11-25 07:58:16] [Batch 300/8504] Loss=3.4686 Device=cuda
-[2025-11-25 07:58:20] [Batch 400/8504] Loss=3.4733 Device=cuda
-[2025-11-25 07:58:24] [Batch 500/8504] Loss=3.4455 Device=cuda
-[2025-11-25 07:58:28] [Batch 600/8504] Loss=3.4578 Device=cuda
-[2025-11-25 07:58:31] [Batch 700/8504] Loss=3.4556 Device=cuda
-[2025-11-25 07:58:35] [Batch 800/8504] Loss=3.4562 Device=cuda
-[2025-11-25 07:58:39] [Batch 900/8504] Loss=3.4655 Device=cuda
-[2025-11-25 07:58:43] [Batch 1000/8504] Loss=3.4342 Device=cuda
-[2025-11-25 07:58:47] [Batch 1100/8504] Loss=3.4388 Device=cuda
-[2025-11-25 07:58:51] [Batch 1200/8504] Loss=3.4159 Device=cuda
-[2025-11-25 07:58:55] [Batch 1300/8504] Loss=3.4079 Device=cuda
-[2025-11-25 07:58:59] [Batch 1400/8504] Loss=3.4005 Device=cuda
-[2025-11-25 07:59:02] [Batch 1500/8504] Loss=3.3606 Device=cuda
-[2025-11-25 07:59:06] [Batch 1600/8504] Loss=3.3841 Device=cuda
-[2025-11-25 07:59:10] [Batch 1700/8504] Loss=3.3987 Device=cuda
-[2025-11-25 07:59:14] [Batch 1800/8504] Loss=3.4109 Device=cuda
-[2025-11-25 07:59:18] [Batch 1900/8504] Loss=3.3860 Device=cuda
-[2025-11-25 07:59:22] [Batch 2000/8504] Loss=3.3896 Device=cuda
-[2025-11-25 07:59:26] [Batch 2100/8504] Loss=3.3664 Device=cuda
-[2025-11-25 07:59:29] [Batch 2200/8504] Loss=3.3628 Device=cuda
-[2025-11-25 07:59:33] [Batch 2300/8504] Loss=3.3645 Device=cuda
-[2025-11-25 07:59:37] [Batch 2400/8504] Loss=3.3689 Device=cuda
-[2025-11-25 07:59:41] [Batch 2500/8504] Loss=3.3886 Device=cuda
-[2025-11-25 07:59:45] [Batch 2600/8504] Loss=3.3290 Device=cuda
-[2025-11-25 07:59:49] [Batch 2700/8504] Loss=3.3923 Device=cuda
-[2025-11-25 07:59:53] [Batch 2800/8504] Loss=3.3487 Device=cuda
-[2025-11-25 07:59:56] [Batch 2900/8504] Loss=3.4167 Device=cuda
-[2025-11-25 08:00:00] [Batch 3000/8504] Loss=3.3875 Device=cuda
-[2025-11-25 08:00:04] [Batch 3100/8504] Loss=3.3786 Device=cuda
-[2025-11-25 08:00:08] [Batch 3200/8504] Loss=3.3918 Device=cuda
-[2025-11-25 08:00:12] [Batch 3300/8504] Loss=3.3455 Device=cuda
-[2025-11-25 08:00:16] [Batch 3400/8504] Loss=3.3779 Device=cuda
-[2025-11-25 08:00:20] [Batch 3500/8504] Loss=3.3662 Device=cuda
-[2025-11-25 08:00:24] [Batch 3600/8504] Loss=3.3475 Device=cuda
-[2025-11-25 08:00:27] [Batch 3700/8504] Loss=3.3339 Device=cuda
-[2025-11-25 08:00:31] [Batch 3800/8504] Loss=3.2878 Device=cuda
-[2025-11-25 08:00:35] [Batch 3900/8504] Loss=3.3439 Device=cuda
-[2025-11-25 08:00:39] [Batch 4000/8504] Loss=3.4179 Device=cuda
-[2025-11-25 08:00:43] [Batch 4100/8504] Loss=3.3443 Device=cuda
-[2025-11-25 08:00:47] [Batch 4200/8504] Loss=3.3716 Device=cuda
-[2025-11-25 08:00:51] [Batch 4300/8504] Loss=3.3346 Device=cuda
-[2025-11-25 08:00:54] [Batch 4400/8504] Loss=3.3063 Device=cuda
-[2025-11-25 08:00:58] [Batch 4500/8504] Loss=3.3414 Device=cuda
-[2025-11-25 08:01:02] [Batch 4600/8504] Loss=3.3574 Device=cuda
-[2025-11-25 08:01:06] [Batch 4700/8504] Loss=3.3477 Device=cuda
-[2025-11-25 08:01:10] [Batch 4800/8504] Loss=3.3503 Device=cuda
-[2025-11-25 08:01:14] [Batch 4900/8504] Loss=3.3273 Device=cuda
-[2025-11-25 08:01:18] [Batch 5000/8504] Loss=3.2965 Device=cuda
-[2025-11-25 08:01:22] [Batch 5100/8504] Loss=3.3137 Device=cuda
-[2025-11-25 08:01:25] [Batch 5200/8504] Loss=3.3342 Device=cuda
-[2025-11-25 08:01:29] [Batch 5300/8504] Loss=3.3241 Device=cuda
-[2025-11-25 08:01:33] [Batch 5400/8504] Loss=3.3681 Device=cuda
-[2025-11-25 08:01:37] [Batch 5500/8504] Loss=3.3456 Device=cuda
-[2025-11-25 08:01:41] [Batch 5600/8504] Loss=3.3113 Device=cuda
-[2025-11-25 08:01:45] [Batch 5700/8504] Loss=3.3481 Device=cuda
-[2025-11-25 08:01:49] [Batch 5800/8504] Loss=3.2917 Device=cuda
-[2025-11-25 08:01:52] [Batch 5900/8504] Loss=3.2675 Device=cuda
-[2025-11-25 08:01:56] [Batch 6000/8504] Loss=3.2546 Device=cuda
-[2025-11-25 08:02:00] [Batch 6100/8504] Loss=3.3529 Device=cuda
-[2025-11-25 08:02:04] [Batch 6200/8504] Loss=3.2231 Device=cuda
-[2025-11-25 08:02:08] [Batch 6300/8504] Loss=3.2725 Device=cuda
-[2025-11-25 08:02:12] [Batch 6400/8504] Loss=3.1962 Device=cuda
-[2025-11-25 08:02:16] [Batch 6500/8504] Loss=3.3234 Device=cuda
-[2025-11-25 08:02:20] [Batch 6600/8504] Loss=3.2732 Device=cuda
-[2025-11-25 08:02:24] [Batch 6700/8504] Loss=3.2265 Device=cuda
-[2025-11-25 08:02:27] [Batch 6800/8504] Loss=3.3117 Device=cuda
-[2025-11-25 08:02:31] [Batch 6900/8504] Loss=3.2427 Device=cuda
-[2025-11-25 08:02:35] [Batch 7000/8504] Loss=3.2734 Device=cuda
-[2025-11-25 08:02:39] [Batch 7100/8504] Loss=3.3736 Device=cuda
-[2025-11-25 08:02:43] [Batch 7200/8504] Loss=3.2162 Device=cuda
-[2025-11-25 08:02:47] [Batch 7300/8504] Loss=3.2761 Device=cuda
-[2025-11-25 08:02:51] [Batch 7400/8504] Loss=3.2533 Device=cuda
-[2025-11-25 08:02:55] [Batch 7500/8504] Loss=3.2562 Device=cuda
-[2025-11-25 08:02:59] [Batch 7600/8504] Loss=3.2445 Device=cuda
-[2025-11-25 08:03:03] [Batch 7700/8504] Loss=3.1657 Device=cuda
-[2025-11-25 08:03:07] [Batch 7800/8504] Loss=3.1996 Device=cuda
-[2025-11-25 08:03:10] [Batch 7900/8504] Loss=3.2419 Device=cuda
-[2025-11-25 08:03:14] [Batch 8000/8504] Loss=3.3136 Device=cuda
-[2025-11-25 08:03:18] [Batch 8100/8504] Loss=3.2996 Device=cuda
-[2025-11-25 08:03:22] [Batch 8200/8504] Loss=3.3227 Device=cuda
-[2025-11-25 08:03:26] [Batch 8300/8504] Loss=3.3101 Device=cuda
-[2025-11-25 08:03:30] [Batch 8400/8504] Loss=3.3021 Device=cuda
-[2025-11-25 08:03:34] [Batch 8500/8504] Loss=3.3301 Device=cuda
-[2025-11-25 08:03:34] Avg loss: 3.3479 on device cuda
-[2025-11-25 08:03:42] HKA only metrics: {'MRR': 0.29259181786841776, 'Hits@1': 0.1537814670138889, 'Hits@3': 0.31473524305555556, 'Hits@10': 0.5983723958333333}, loss=3.3479
-[2025-11-25 08:03:42] === Epoch 2 ===
-[2025-11-25 08:03:46] [Batch 100/8504] Loss=3.3101 Device=cuda
-[2025-11-25 08:03:49] [Batch 200/8504] Loss=3.2217 Device=cuda
+(base) naver@naver-System-Product-Name:~/MinhPV/sat_rag$ uv run main.py
+Input Files Path : /home/naver/MinhPV/sat_rag/OpenKE/benchmarks/FB15K237/
+The total of test triples is 20466.
+The total of valid triples is 17535.
+[2026-01-18 10:54:36] 
+==================== MODE 1: eval_GE(OpenKE Tester) ====================
+GE entity emb shape: torch.Size([14541, 128])
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20466/20466 [00:12<00:00, 1674.47it/s]
+no type constraint results:
+metric:                  MRR             MR              hit@10          hit@3           hit@1 
+l(raw):                  0.083744        616.063782      0.186407        0.076029        0.035376 
+r(raw):                  0.243126        169.135788      0.413857        0.253152        0.162758 
+averaged(raw):           0.163435        392.599792      0.300132        0.164590        0.099067 
+
+l(filter):               0.219520        284.880280      0.392798        0.243624        0.134907 
+r(filter):               0.414075        138.507721      0.610916        0.457295        0.315157 
+averaged(filter):        0.316798        211.694000      0.501857        0.350459        0.225032 
+0.501857
+0.5018567442893982
+[2026-01-18 10:54:49] MODE 1 | MRR=0.316798 MR=211.694 H@10=0.501857 H@3=0.350459 H@1=0.225032
+[2026-01-18 10:54:49] 
+==================== MODE 2: train_TE+GE_local ====================
+GE entity emb shape: torch.Size([14541, 128])
+TE hidden size: 128
+[2026-01-18 10:54:51] HKA start: local=3 global=0 train_TE=True train_GE=True
+[2026-01-18 10:54:51] === STAGE 1: Local (subgraph <-> head_text) ===
+[2026-01-18 10:54:51] --- Local Epoch 1/3 ---
+[2026-01-18 10:56:15] [Local] Ep1 Step10000 Loss=0.8323
+[2026-01-18 10:57:25] [Local] Ep1 Step20000 Loss=0.7263
+[2026-01-18 10:58:37] [Local] Ep1 Step30000 Loss=0.7223
+[2026-01-18 10:59:47] [Local] Ep1 Step40000 Loss=0.6890
+[2026-01-18 11:01:02] [Local] Ep1 Step50000 Loss=0.7191
+[2026-01-18 11:02:14] [Local] Ep1 Step60000 Loss=0.6955
+[2026-01-18 11:03:22] [Local] Ep1 Step70000 Loss=0.7128
+[2026-01-18 11:04:30] [Local] Ep1 Step80000 Loss=0.6284
+[2026-01-18 11:05:37] [Local] Ep1 Step90000 Loss=0.5610
+[2026-01-18 11:06:48] [Local] Ep1 Step100000 Loss=0.8831
+[2026-01-18 11:08:00] [Local] Ep1 Step110000 Loss=0.7247
+[2026-01-18 11:09:14] [Local] Ep1 Step120000 Loss=0.6361
+[2026-01-18 11:10:27] [Local] Ep1 Step130000 Loss=0.5162
+[2026-01-18 11:11:13] --- Local Epoch 2/3 ---
+[2026-01-18 11:12:25] [Local] Ep2 Step10000 Loss=0.7446
+[2026-01-18 11:13:35] [Local] Ep2 Step20000 Loss=0.6363
+[2026-01-18 11:14:46] [Local] Ep2 Step30000 Loss=0.2194
+[2026-01-18 11:16:02] [Local] Ep2 Step40000 Loss=0.5929
+[2026-01-18 11:17:16] [Local] Ep2 Step50000 Loss=0.5521
+[2026-01-18 11:18:24] [Local] Ep2 Step60000 Loss=0.4019
+[2026-01-18 11:19:38] [Local] Ep2 Step70000 Loss=0.3248
+[2026-01-18 11:20:50] [Local] Ep2 Step80000 Loss=0.6830
+[2026-01-18 11:22:05] [Local] Ep2 Step90000 Loss=0.7155
+[2026-01-18 11:23:17] [Local] Ep2 Step100000 Loss=0.8887
+[2026-01-18 11:24:32] [Local] Ep2 Step110000 Loss=1.1033
+[2026-01-18 11:25:42] [Local] Ep2 Step120000 Loss=0.6610
+[2026-01-18 11:26:54] [Local] Ep2 Step130000 Loss=0.3536
+[2026-01-18 11:27:39] --- Local Epoch 3/3 ---
+[2026-01-18 11:28:50] [Local] Ep3 Step10000 Loss=0.9016
+[2026-01-18 11:30:01] [Local] Ep3 Step20000 Loss=0.8454
+[2026-01-18 11:31:17] [Local] Ep3 Step30000 Loss=0.3580
+[2026-01-18 11:32:28] [Local] Ep3 Step40000 Loss=0.2335
+[2026-01-18 11:33:38] [Local] Ep3 Step50000 Loss=0.4938
+[2026-01-18 11:34:51] [Local] Ep3 Step60000 Loss=0.5478
+[2026-01-18 11:36:04] [Local] Ep3 Step70000 Loss=0.6355
+[2026-01-18 11:37:20] [Local] Ep3 Step80000 Loss=0.1545
+[2026-01-18 11:38:30] [Local] Ep3 Step90000 Loss=0.4280
+[2026-01-18 11:39:40] [Local] Ep3 Step100000 Loss=0.5326
+[2026-01-18 11:40:52] [Local] Ep3 Step110000 Loss=0.6035
+[2026-01-18 11:42:00] [Local] Ep3 Step120000 Loss=0.1496
+[2026-01-18 11:43:10] [Local] Ep3 Step130000 Loss=0.5361
+[2026-01-18 11:44:00] HKA completed.
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20466/20466 [00:13<00:00, 1535.35it/s]
+no type constraint results:
+metric:                  MRR             MR              hit@10          hit@3           hit@1 
+l(raw):                  0.057771        1055.110107     0.121225        0.054090        0.024773 
+r(raw):                  0.179037        596.820801      0.304945        0.187677        0.115900 
+averaged(raw):           0.118404        825.965454      0.213085        0.120883        0.070336 
+
+l(filter):               0.124412        788.666809      0.224470        0.132757        0.072657 
+r(filter):               0.272581        571.175049      0.420991        0.302306        0.196228 
+averaged(filter):        0.198496        679.920898      0.322730        0.217532        0.134442 
+0.322730
+0.3227303922176361
+[2026-01-18 11:44:13] MODE 2 | MRR=0.198496 MR=679.921 H@10=0.322730 H@3=0.217532 H@1=0.134442
+[2026-01-18 11:44:13] 
+==================== MODE 3: train_GE_only_local ====================
+[2026-01-18 11:44:16] HKA start: local=3 global=0 train_TE=False train_GE=True
+[2026-01-18 11:44:16] === STAGE 1: Local (subgraph <-> head_text) ===
+[2026-01-18 11:44:16] --- Local Epoch 1/3 ---
+[2026-01-18 11:45:15] [Local] Ep1 Step10000 Loss=0.7021
+[2026-01-18 11:46:14] [Local] Ep1 Step20000 Loss=0.6494
+[2026-01-18 11:47:11] [Local] Ep1 Step30000 Loss=0.7701
+[2026-01-18 11:48:11] [Local] Ep1 Step40000 Loss=0.7061
+[2026-01-18 11:49:11] [Local] Ep1 Step50000 Loss=0.7011
+[2026-01-18 11:50:17] [Local] Ep1 Step60000 Loss=0.6689
+[2026-01-18 11:51:18] [Local] Ep1 Step70000 Loss=0.7723
+[2026-01-18 11:52:18] [Local] Ep1 Step80000 Loss=0.7180
+[2026-01-18 11:53:20] [Local] Ep1 Step90000 Loss=0.5443
+[2026-01-18 11:54:23] [Local] Ep1 Step100000 Loss=0.7237
+[2026-01-18 11:55:22] [Local] Ep1 Step110000 Loss=0.6754
+[2026-01-18 11:56:25] [Local] Ep1 Step120000 Loss=0.7214
+[2026-01-18 11:57:23] [Local] Ep1 Step130000 Loss=0.5845
+[2026-01-18 11:58:01] --- Local Epoch 2/3 ---
+[2026-01-18 11:59:07] [Local] Ep2 Step10000 Loss=0.7921
+[2026-01-18 12:00:08] [Local] Ep2 Step20000 Loss=0.4075
+[2026-01-18 12:01:08] [Local] Ep2 Step30000 Loss=0.6020
+[2026-01-18 12:02:06] [Local] Ep2 Step40000 Loss=0.8426
+[2026-01-18 12:03:07] [Local] Ep2 Step50000 Loss=0.5229
+[2026-01-18 12:04:05] [Local] Ep2 Step60000 Loss=0.5319
+[2026-01-18 12:05:06] [Local] Ep2 Step70000 Loss=0.5865
+[2026-01-18 12:06:04] [Local] Ep2 Step80000 Loss=0.5999
+[2026-01-18 12:07:05] [Local] Ep2 Step90000 Loss=0.4730
+[2026-01-18 12:08:04] [Local] Ep2 Step100000 Loss=0.5673
+[2026-01-18 12:09:01] [Local] Ep2 Step110000 Loss=0.6910
+[2026-01-18 12:10:05] [Local] Ep2 Step120000 Loss=0.6351
+[2026-01-18 12:11:06] [Local] Ep2 Step130000 Loss=0.2364
+[2026-01-18 12:11:46] --- Local Epoch 3/3 ---
+[2026-01-18 12:12:41] [Local] Ep3 Step10000 Loss=0.7465
+[2026-01-18 12:13:39] [Local] Ep3 Step20000 Loss=0.6304
+[2026-01-18 12:14:39] [Local] Ep3 Step30000 Loss=0.5887
+[2026-01-18 12:15:43] [Local] Ep3 Step40000 Loss=0.4399
+[2026-01-18 12:16:50] [Local] Ep3 Step50000 Loss=0.5608
+[2026-01-18 12:17:50] [Local] Ep3 Step60000 Loss=0.6406
+[2026-01-18 12:18:58] [Local] Ep3 Step70000 Loss=0.5702
+[2026-01-18 12:20:00] [Local] Ep3 Step80000 Loss=0.3260
+[2026-01-18 12:21:01] [Local] Ep3 Step90000 Loss=0.2474
+[2026-01-18 12:22:08] [Local] Ep3 Step100000 Loss=0.3187
+[2026-01-18 12:23:11] [Local] Ep3 Step110000 Loss=0.4689
+[2026-01-18 12:24:12] [Local] Ep3 Step120000 Loss=0.6812
+[2026-01-18 12:25:08] [Local] Ep3 Step130000 Loss=0.6127
+[2026-01-18 12:25:43] HKA completed.
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20466/20466 [00:14<00:00, 1420.09it/s]
+no type constraint results:
+metric:                  MRR             MR              hit@10          hit@3           hit@1 
+l(raw):                  0.036494        1640.329956     0.070654        0.031369        0.015685 
+r(raw):                  0.105256        1160.863525     0.182009        0.107202        0.064057 
+averaged(raw):           0.070875        1400.596680     0.126331        0.069286        0.039871 
+
+l(filter):               0.075019        1385.744019     0.136666        0.078814        0.041435 
+r(filter):               0.154009        1136.521851     0.254813        0.168230        0.101485 
+averaged(filter):        0.114514        1261.132935     0.195739        0.123522        0.071460 
+0.195739
+0.1957392692565918
+[2026-01-18 12:25:57] MODE 3 | MRR=0.114514 MR=1261.133 H@10=0.195739 H@3=0.123522 H@1=0.071460
+[2026-01-18 12:25:57] 
+==================== MODE 4: train_TE+GE_global ====================
+[2026-01-18 12:26:00] HKA start: local=0 global=3 train_TE=True train_GE=True
+[2026-01-18 12:26:00] === STAGE 2: Global (subgraph <-> subgraph_doc) ===
+[2026-01-18 12:26:00] --- Global Epoch 1/3 ---
+[2026-01-18 12:27:19] [Global] Ep1 Step10000 Loss=0.5244
+[2026-01-18 12:28:34] [Global] Ep1 Step20000 Loss=0.6454
+[2026-01-18 12:29:49] [Global] Ep1 Step30000 Loss=0.6478
+[2026-01-18 12:31:05] [Global] Ep1 Step40000 Loss=0.5274
+[2026-01-18 12:32:21] [Global] Ep1 Step50000 Loss=0.6965
+[2026-01-18 12:33:38] [Global] Ep1 Step60000 Loss=0.5827
+[2026-01-18 12:34:52] [Global] Ep1 Step70000 Loss=0.1230
+[2026-01-18 12:36:07] [Global] Ep1 Step80000 Loss=0.0023
+[2026-01-18 12:37:23] [Global] Ep1 Step90000 Loss=0.0457
+[2026-01-18 12:38:38] [Global] Ep1 Step100000 Loss=0.0017
+[2026-01-18 12:39:54] [Global] Ep1 Step110000 Loss=0.9000
+[2026-01-18 12:41:08] [Global] Ep1 Step120000 Loss=0.0966
+[2026-01-18 12:42:26] [Global] Ep1 Step130000 Loss=0.0018
+[2026-01-18 12:43:11] --- Global Epoch 2/3 ---
+[2026-01-18 12:44:32] [Global] Ep2 Step10000 Loss=0.1469
+[2026-01-18 12:45:46] [Global] Ep2 Step20000 Loss=0.0154
+[2026-01-18 12:47:00] [Global] Ep2 Step30000 Loss=0.0290
+[2026-01-18 12:48:19] [Global] Ep2 Step40000 Loss=0.0155
+[2026-01-18 12:49:37] [Global] Ep2 Step50000 Loss=0.0003
+[2026-01-18 12:50:59] [Global] Ep2 Step60000 Loss=0.7548
+[2026-01-18 12:52:18] [Global] Ep2 Step70000 Loss=0.0198
+[2026-01-18 12:53:32] [Global] Ep2 Step80000 Loss=0.0101
+[2026-01-18 12:54:44] [Global] Ep2 Step90000 Loss=0.0026
+[2026-01-18 12:56:02] [Global] Ep2 Step100000 Loss=0.0149
+[2026-01-18 12:57:20] [Global] Ep2 Step110000 Loss=0.0050
+[2026-01-18 12:58:35] [Global] Ep2 Step120000 Loss=0.0066
+[2026-01-18 12:59:52] [Global] Ep2 Step130000 Loss=0.0157
+[2026-01-18 13:00:42] --- Global Epoch 3/3 ---
+[2026-01-18 13:01:58] [Global] Ep3 Step10000 Loss=0.0315
+[2026-01-18 13:03:17] [Global] Ep3 Step20000 Loss=0.0152
+[2026-01-18 13:04:31] [Global] Ep3 Step30000 Loss=0.0163
+[2026-01-18 13:05:48] [Global] Ep3 Step40000 Loss=0.0080
+[2026-01-18 13:07:03] [Global] Ep3 Step50000 Loss=0.0018
+[2026-01-18 13:08:21] [Global] Ep3 Step60000 Loss=0.0000
+[2026-01-18 13:09:36] [Global] Ep3 Step70000 Loss=0.0007
+[2026-01-18 13:10:53] [Global] Ep3 Step80000 Loss=0.0323
+[2026-01-18 13:12:05] [Global] Ep3 Step90000 Loss=0.6581
+[2026-01-18 13:13:21] [Global] Ep3 Step100000 Loss=0.9560
+[2026-01-18 13:14:37] [Global] Ep3 Step110000 Loss=0.0227
+[2026-01-18 13:15:54] [Global] Ep3 Step120000 Loss=0.8653
+[2026-01-18 13:17:09] [Global] Ep3 Step130000 Loss=0.4706
+[2026-01-18 13:17:54] HKA completed.
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20466/20466 [00:15<00:00, 1355.27it/s]
+no type constraint results:
+metric:                  MRR             MR              hit@10          hit@3           hit@1 
+l(raw):                  0.034689        1747.090210     0.074709        0.028389        0.012509 
+r(raw):                  0.044532        2820.693359     0.092935        0.039431        0.019496 
+averaged(raw):           0.039610        2283.891846     0.083822        0.033910        0.016002 
+
+l(filter):               0.078429        1506.761841     0.146438        0.080915        0.042461 
+r(filter):               0.086921        2796.123535     0.153132        0.093277        0.052233 
+averaged(filter):        0.082675        2151.442627     0.149785        0.087096        0.047347 
+0.149785
+0.14978501200675964
+[2026-01-18 13:18:09] MODE 4 | MRR=0.082675 MR=2151.443 H@10=0.149785 H@3=0.087096 H@1=0.047347
+[2026-01-18 13:18:09] 
+==================== MODE 5: train_GE_only_global ====================
+[2026-01-18 13:18:11] HKA start: local=0 global=3 train_TE=False train_GE=True
+[2026-01-18 13:18:11] === STAGE 2: Global (subgraph <-> subgraph_doc) ===
+[2026-01-18 13:18:11] --- Global Epoch 1/3 ---
+[2026-01-18 13:19:18] [Global] Ep1 Step10000 Loss=0.6970
+[2026-01-18 13:20:23] [Global] Ep1 Step20000 Loss=0.6939
+[2026-01-18 13:21:29] [Global] Ep1 Step30000 Loss=0.6513
+[2026-01-18 13:22:39] [Global] Ep1 Step40000 Loss=0.6628
+[2026-01-18 13:23:46] [Global] Ep1 Step50000 Loss=0.7137
+[2026-01-18 13:24:50] [Global] Ep1 Step60000 Loss=0.6916
+[2026-01-18 13:26:01] [Global] Ep1 Step70000 Loss=0.1174
+[2026-01-18 13:27:07] [Global] Ep1 Step80000 Loss=0.3139
+[2026-01-18 13:28:13] [Global] Ep1 Step90000 Loss=0.6979
+[2026-01-18 13:29:17] [Global] Ep1 Step100000 Loss=0.0470
+[2026-01-18 13:30:26] [Global] Ep1 Step110000 Loss=0.2088
+[2026-01-18 13:31:34] [Global] Ep1 Step120000 Loss=0.0787
+[2026-01-18 13:32:39] [Global] Ep1 Step130000 Loss=0.3215
+[2026-01-18 13:33:18] --- Global Epoch 2/3 ---
+[2026-01-18 13:34:26] [Global] Ep2 Step10000 Loss=0.0274
+[2026-01-18 13:35:32] [Global] Ep2 Step20000 Loss=0.1608
+[2026-01-18 13:36:36] [Global] Ep2 Step30000 Loss=0.0402
+[2026-01-18 13:37:43] [Global] Ep2 Step40000 Loss=0.0336
+[2026-01-18 13:38:47] [Global] Ep2 Step50000 Loss=0.0893
+[2026-01-18 13:39:57] [Global] Ep2 Step60000 Loss=0.1895
+[2026-01-18 13:41:04] [Global] Ep2 Step70000 Loss=0.2909
+[2026-01-18 13:42:12] [Global] Ep2 Step80000 Loss=0.4196
+[2026-01-18 13:43:18] [Global] Ep2 Step90000 Loss=0.6593
+[2026-01-18 13:44:25] [Global] Ep2 Step100000 Loss=0.0636
+[2026-01-18 13:45:28] [Global] Ep2 Step110000 Loss=0.6114
+[2026-01-18 13:46:34] [Global] Ep2 Step120000 Loss=0.6391
+[2026-01-18 13:47:38] [Global] Ep2 Step130000 Loss=0.1726
+[2026-01-18 13:48:19] --- Global Epoch 3/3 ---
+[2026-01-18 13:49:27] [Global] Ep3 Step10000 Loss=0.0236
+[2026-01-18 13:50:43] [Global] Ep3 Step20000 Loss=0.5836
+[2026-01-18 13:51:47] [Global] Ep3 Step30000 Loss=0.0858
+[2026-01-18 13:52:52] [Global] Ep3 Step40000 Loss=0.0607
+[2026-01-18 13:54:01] [Global] Ep3 Step50000 Loss=0.1059
+[2026-01-18 13:55:09] [Global] Ep3 Step60000 Loss=0.1591
+[2026-01-18 13:56:17] [Global] Ep3 Step70000 Loss=0.0147
+[2026-01-18 13:57:23] [Global] Ep3 Step80000 Loss=0.6404
+[2026-01-18 13:58:40] [Global] Ep3 Step90000 Loss=0.0538
+[2026-01-18 13:59:47] [Global] Ep3 Step100000 Loss=0.1269
+[2026-01-18 14:00:54] [Global] Ep3 Step110000 Loss=0.2846
+[2026-01-18 14:02:01] [Global] Ep3 Step120000 Loss=0.0881
+[2026-01-18 14:03:06] [Global] Ep3 Step130000 Loss=0.6856
+[2026-01-18 14:03:47] HKA completed.
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20466/20466 [00:18<00:00, 1082.91it/s]
+no type constraint results:
+metric:                  MRR             MR              hit@10          hit@3           hit@1 
+l(raw):                  0.016089        3746.305176     0.030050        0.014023        0.006743 
+r(raw):                  0.018161        5806.570801     0.036500        0.015880        0.007769 
+averaged(raw):           0.017125        4776.437988     0.033275        0.014952        0.007256 
+
+l(filter):               0.031017        3520.537109     0.055116        0.033079        0.016857 
+r(filter):               0.033360        5783.558594     0.057950        0.035815        0.019105 
+averaged(filter):        0.032189        4652.047852     0.056533        0.034447        0.017981 
+0.056533
+0.056532785296440125
+[2026-01-18 14:04:06] MODE 5 | MRR=0.032189 MR=4652.048 H@10=0.056533 H@3=0.034447 H@1=0.017981
+[2026-01-18 14:04:06] 
+==================== MODE 6: train_TE+GE_HKA ====================
+[2026-01-18 14:04:08] HKA start: local=2 global=1 train_TE=True train_GE=True
+[2026-01-18 14:04:08] === STAGE 1: Local (subgraph <-> head_text) ===
+[2026-01-18 14:04:08] --- Local Epoch 1/2 ---
+[2026-01-18 14:05:15] [Local] Ep1 Step10000 Loss=1.0257
+[2026-01-18 14:06:27] [Local] Ep1 Step20000 Loss=0.6944
+[2026-01-18 14:07:35] [Local] Ep1 Step30000 Loss=0.7580
+[2026-01-18 14:08:48] [Local] Ep1 Step40000 Loss=0.6733
+[2026-01-18 14:10:00] [Local] Ep1 Step50000 Loss=0.7030
+[2026-01-18 14:11:10] [Local] Ep1 Step60000 Loss=0.7335
+[2026-01-18 14:12:23] [Local] Ep1 Step70000 Loss=0.6777
+[2026-01-18 14:13:33] [Local] Ep1 Step80000 Loss=0.6878
+[2026-01-18 14:14:43] [Local] Ep1 Step90000 Loss=0.6459
+[2026-01-18 14:15:52] [Local] Ep1 Step100000 Loss=0.6047
+[2026-01-18 14:17:06] [Local] Ep1 Step110000 Loss=0.6886
+[2026-01-18 14:18:15] [Local] Ep1 Step120000 Loss=0.7014
+[2026-01-18 14:19:27] [Local] Ep1 Step130000 Loss=0.4501
+[2026-01-18 14:20:07] --- Local Epoch 2/2 ---
+[2026-01-18 14:21:18] [Local] Ep2 Step10000 Loss=0.6971
+[2026-01-18 14:22:27] [Local] Ep2 Step20000 Loss=0.6901
+[2026-01-18 14:23:41] [Local] Ep2 Step30000 Loss=0.7347
+[2026-01-18 14:24:52] [Local] Ep2 Step40000 Loss=0.5859
+[2026-01-18 14:25:59] [Local] Ep2 Step50000 Loss=0.6812
+[2026-01-18 14:27:18] [Local] Ep2 Step60000 Loss=0.3344
+[2026-01-18 14:28:27] [Local] Ep2 Step70000 Loss=0.4824
+[2026-01-18 14:29:39] [Local] Ep2 Step80000 Loss=0.7055
+[2026-01-18 14:30:52] [Local] Ep2 Step90000 Loss=0.7811
+[2026-01-18 14:32:04] [Local] Ep2 Step100000 Loss=0.7922
+[2026-01-18 14:33:17] [Local] Ep2 Step110000 Loss=0.5434
+[2026-01-18 14:34:32] [Local] Ep2 Step120000 Loss=0.7436
+[2026-01-18 14:35:46] [Local] Ep2 Step130000 Loss=0.7211
+[2026-01-18 14:36:29] === STAGE 2: Global (subgraph <-> subgraph_doc) ===
+[2026-01-18 14:36:29] --- Global Epoch 1/1 ---
+[2026-01-18 14:37:43] [Global] Ep1 Step10000 Loss=0.7659
+[2026-01-18 14:38:58] [Global] Ep1 Step20000 Loss=0.7264
+[2026-01-18 14:40:18] [Global] Ep1 Step30000 Loss=0.0077
+[2026-01-18 14:41:31] [Global] Ep1 Step40000 Loss=0.0021
+[2026-01-18 14:42:45] [Global] Ep1 Step50000 Loss=0.4119
+[2026-01-18 14:44:04] [Global] Ep1 Step60000 Loss=0.0891
+[2026-01-18 14:45:19] [Global] Ep1 Step70000 Loss=0.0034
+[2026-01-18 14:46:37] [Global] Ep1 Step80000 Loss=1.3906
+[2026-01-18 14:47:55] [Global] Ep1 Step90000 Loss=0.0200
+[2026-01-18 14:49:08] [Global] Ep1 Step100000 Loss=0.0155
+[2026-01-18 14:50:27] [Global] Ep1 Step110000 Loss=0.0529
+[2026-01-18 14:51:40] [Global] Ep1 Step120000 Loss=0.0115
+[2026-01-18 14:52:57] [Global] Ep1 Step130000 Loss=0.3318
+[2026-01-18 14:53:42] HKA completed.
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20466/20466 [00:13<00:00, 1492.94it/s]
+no type constraint results:
+metric:                  MRR             MR              hit@10          hit@3           hit@1 
+l(raw):                  0.047777        1202.819458     0.104075        0.041777        0.018176 
+r(raw):                  0.076734        1060.933228     0.159875        0.075198        0.033421 
+averaged(raw):           0.062255        1131.876343     0.131975        0.058487        0.025799 
+
+l(filter):               0.108206        951.589172      0.199355        0.117659        0.060295 
+r(filter):               0.141256        1035.761108     0.247728        0.155966        0.085605 
+averaged(filter):        0.124731        993.675171      0.223541        0.136812        0.072950 
+0.223541
+0.2235414832830429
+[2026-01-18 14:53:56] MODE 6 | MRR=0.124731 MR=993.675 H@10=0.223541 H@3=0.136812 H@1=0.072950
+[2026-01-18 14:53:56] 
+==================== MODE 7: train_GE_only_HKA ====================
+[2026-01-18 14:53:58] HKA start: local=2 global=1 train_TE=False train_GE=True
+[2026-01-18 14:53:58] === STAGE 1: Local (subgraph <-> head_text) ===
+[2026-01-18 14:53:58] --- Local Epoch 1/2 ---
+[2026-01-18 14:54:57] [Local] Ep1 Step10000 Loss=0.7146
+[2026-01-18 14:56:00] [Local] Ep1 Step20000 Loss=0.6887
+[2026-01-18 14:57:01] [Local] Ep1 Step30000 Loss=0.8065
+[2026-01-18 14:58:09] [Local] Ep1 Step40000 Loss=0.7753
+[2026-01-18 14:59:09] [Local] Ep1 Step50000 Loss=0.6637
+[2026-01-18 15:00:06] [Local] Ep1 Step60000 Loss=0.7058
+[2026-01-18 15:01:10] [Local] Ep1 Step70000 Loss=0.6181
+[2026-01-18 15:02:15] [Local] Ep1 Step80000 Loss=0.5541
+[2026-01-18 15:03:15] [Local] Ep1 Step90000 Loss=0.7161
+[2026-01-18 15:04:17] [Local] Ep1 Step100000 Loss=0.6874
+[2026-01-18 15:05:19] [Local] Ep1 Step110000 Loss=0.5986
+[2026-01-18 15:06:24] [Local] Ep1 Step120000 Loss=0.6971
+[2026-01-18 15:07:28] [Local] Ep1 Step130000 Loss=0.6780
+[2026-01-18 15:08:04] --- Local Epoch 2/2 ---
+[2026-01-18 15:09:05] [Local] Ep2 Step10000 Loss=0.6325
+[2026-01-18 15:10:06] [Local] Ep2 Step20000 Loss=0.6884
+[2026-01-18 15:11:11] [Local] Ep2 Step30000 Loss=0.6035
+[2026-01-18 15:12:13] [Local] Ep2 Step40000 Loss=0.3512
+[2026-01-18 15:13:15] [Local] Ep2 Step50000 Loss=0.6598
+[2026-01-18 15:14:17] [Local] Ep2 Step60000 Loss=0.7541
+[2026-01-18 15:15:18] [Local] Ep2 Step70000 Loss=0.3733
+[2026-01-18 15:16:21] [Local] Ep2 Step80000 Loss=0.6516
+[2026-01-18 15:17:25] [Local] Ep2 Step90000 Loss=0.6096
+[2026-01-18 15:18:26] [Local] Ep2 Step100000 Loss=0.5132
+[2026-01-18 15:19:26] [Local] Ep2 Step110000 Loss=0.4511
+[2026-01-18 15:20:33] [Local] Ep2 Step120000 Loss=0.7927
+[2026-01-18 15:21:38] [Local] Ep2 Step130000 Loss=0.6551
+[2026-01-18 15:22:15] === STAGE 2: Global (subgraph <-> subgraph_doc) ===
+[2026-01-18 15:22:15] --- Global Epoch 1/1 ---
+[2026-01-18 15:23:24] [Global] Ep1 Step10000 Loss=0.1120
+[2026-01-18 15:24:30] [Global] Ep1 Step20000 Loss=0.6517
+[2026-01-18 15:25:36] [Global] Ep1 Step30000 Loss=0.3120
+[2026-01-18 15:26:41] [Global] Ep1 Step40000 Loss=0.0547
+[2026-01-18 15:27:47] [Global] Ep1 Step50000 Loss=0.2964
+[2026-01-18 15:28:57] [Global] Ep1 Step60000 Loss=0.6800
+[2026-01-18 15:30:04] [Global] Ep1 Step70000 Loss=0.2612
+[2026-01-18 15:31:16] [Global] Ep1 Step80000 Loss=0.0456
+[2026-01-18 15:32:23] [Global] Ep1 Step90000 Loss=0.6923
+[2026-01-18 15:33:30] [Global] Ep1 Step100000 Loss=0.2111
+[2026-01-18 15:34:40] [Global] Ep1 Step110000 Loss=0.2136
+[2026-01-18 15:35:50] [Global] Ep1 Step120000 Loss=0.1953
+[2026-01-18 15:36:56] [Global] Ep1 Step130000 Loss=0.0509
+[2026-01-18 15:37:35] HKA completed.
+100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20466/20466 [00:16<00:00, 1256.98it/s]
+no type constraint results:
+metric:                  MRR             MR              hit@10          hit@3           hit@1 
+l(raw):                  0.022567        2383.903320     0.046223        0.017639        0.008502 
+r(raw):                  0.026545        3538.359131     0.055067        0.022525        0.010701 
+averaged(raw):           0.024556        2961.131348     0.050645        0.020082        0.009601 
+
+l(filter):               0.045733        2145.980957     0.085605        0.046321        0.023454 
+r(filter):               0.050179        3514.638184     0.089368        0.052038        0.028779 
+averaged(filter):        0.047956        2830.309570     0.087487        0.049179        0.026116 
+0.087487
+0.08748656511306763
+[2026-01-18 15:37:51] MODE 7 | MRR=0.047956 MR=2830.310 H@10=0.087487 H@3=0.049179 H@1=0.026116
+[2026-01-18 15:37:51] 
+==================== SUMMARY ====================
+[2026-01-18 15:37:51] mode1_eval_ge: {'MRR': 0.3167975842952728, 'MR': 211.69400024414062, 'H@10': 0.5018567442893982, 'H@3': 0.3504593074321747, 'H@1': 0.2250317633152008}
+[2026-01-18 15:37:51] mode2_tege_local: {'MRR': 0.19849631190299988, 'MR': 679.9208984375, 'H@10': 0.3227303922176361, 'H@3': 0.21753151714801788, 'H@1': 0.1344424933195114}
+[2026-01-18 15:37:51] mode3_geonly_local: {'MRR': 0.11451394855976105, 'MR': 1261.1329345703125, 'H@10': 0.1957392692565918, 'H@3': 0.12352193892002106, 'H@1': 0.07145998626947403}
+[2026-01-18 15:37:51] mode4_tege_global: {'MRR': 0.08267529308795929, 'MR': 2151.442626953125, 'H@10': 0.14978501200675964, 'H@3': 0.08709567785263062, 'H@1': 0.0473468191921711}
+[2026-01-18 15:37:51] mode5_geonly_global: {'MRR': 0.03218855336308479, 'MR': 4652.0478515625, 'H@10': 0.056532785296440125, 'H@3': 0.03444737568497658, 'H@1': 0.017981041222810745}
+[2026-01-18 15:37:51] mode6_tege_hka: {'MRR': 0.12473101913928986, 'MR': 993.6751708984375, 'H@10': 0.2235414832830429, 'H@3': 0.1368122696876526, 'H@1': 0.07295025885105133}
+[2026-01-18 15:37:51] mode7_geonly_hka: {'MRR': 0.047956034541130066, 'MR': 2830.3095703125, 'H@10': 0.08748656511306763, 'H@3': 0.04917912557721138, 'H@1': 0.02611648663878441}

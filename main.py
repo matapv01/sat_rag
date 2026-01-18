@@ -1,188 +1,164 @@
-import torch
-from torch.utils.data import DataLoader
-from torch import optim, nn
-import time
+import torch.optim as optim
 
-from src.data_loader import FB15K237Graph, LocalAlignmentDataset
-from src.graph_encoder import GraphormerEncoder
+from OpenKE.openke.data import TestDataLoader
+from OpenKE.openke.config import Tester
+from OpenKE.openke.module.model import RotatE
 from src.text_encoder import TextEncoderPretrained
-from src.hka_trainer import train_hka
-from src.knowledge_adapter import KnowledgeAdapter
-from src.metrics import evaluate_retrieval
+from src.hka_trainer import train_hka_joint
 
-def log(msg):
+import time
+import torch
+from src.data_loader import FB15K237Graph
+
+
+from torch.utils.data import DataLoader
+from src.data_loader import LocalAlignmentDataset, collate_fn
+
+
+def log(msg: str):
     print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {msg}", flush=True)
 
-# --- collate_fn ---
-def collate_fn(batch):
-    out = {}
-    for key in batch[0]:
-        if key == "subgraph":
-            out[key] = [d[key] for d in batch]
-        else:
-            out[key] = torch.tensor([d[key] for d in batch])
-    return out
 
-def main():
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    log(f"Using device: {device}")
 
-    # ---------------- Load KG ----------------
-    graph_obj = FB15K237Graph(data_dir="data/fb15k237")
-    log(f"Loaded KG: {len(graph_obj.train_triples)} train triples, "
-        f"{len(graph_obj.test_triples)} test triples, {len(graph_obj.entities)} entities")
+device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    num_entities = len(graph_obj.entities)
 
-    # ---------------- Graph Encoder (Pretrained embeddings only) ----------------
-    log("Loading Graphormer pretrained model...")
-    graph_encoder = GraphormerEncoder(
-        model_name="clefourrier/graphormer-base-pcqm4mv2",
-        use_pretrained=True,
-        device=device
-    ).to(device)
 
-    # Load pretrained node embeddings (no forward)
-    pretrained_dim = graph_encoder.model.config.hidden_size
-    graph_encoder.load_lambdaKG_embeddings(torch.randn(num_entities, pretrained_dim).to(device))
+graph_obj = FB15K237Graph(
+    data_dir="data/fb15k237",
+    entity2id_path="/home/naver/MinhPV/sat_rag/OpenKE/benchmarks/FB15K237/entity2id.txt",
+    relation2id_path="/home/naver/MinhPV/sat_rag/OpenKE/benchmarks/FB15K237/relation2id.txt",
+)
 
-    # Graph Encoder always frozen
-    for p in graph_encoder.parameters():
+
+dataset = LocalAlignmentDataset(graph_obj, k_hop=2)
+
+dataloader = DataLoader(
+    dataset,
+    batch_size=2,          # giữ nhỏ cho joint TE+GE
+    shuffle=True,
+    collate_fn=collate_fn,
+    num_workers=0,
+    pin_memory=(device == "cuda"),
+)
+grad_accum_steps = 8
+doc_max_length = 96
+
+
+def eval_openke_linkpred(tag, rotate_model, test_dataloader, use_gpu=True):
+    tester = Tester(model=rotate_model, data_loader=test_dataloader, use_gpu=use_gpu)
+    mrr, mr, hit10, hit3, hit1 = tester.run_link_prediction(type_constrain=False)
+    log(f"{tag} | MRR={mrr:.6f} MR={mr:.3f} H@10={hit10:.6f} H@3={hit3:.6f} H@1={hit1:.6f}")
+    return {"MRR": float(mrr), "MR": float(mr), "H@10": float(hit10), "H@3": float(hit3), "H@1": float(hit1)}
+
+def make_opt_joint(rotate, text_encoder, lr_ge=1e-4, lr_te=2e-6):
+    return optim.AdamW([
+        {"params": rotate.parameters(), "lr": lr_ge},
+        {"params": text_encoder.parameters(), "lr": lr_te},
+    ], weight_decay=0.01)
+
+def make_opt_ge_only_all(rotate, lr_ge=1e-4):
+    return optim.AdamW([{"params": rotate.parameters(), "lr": lr_ge}], weight_decay=0.0)
+
+def make_opt_ge_only_entity(rotate, lr_ge=1e-4):
+    # freeze all, train only entity embedding
+    for p in rotate.parameters():
         p.requires_grad = False
+    ent_w = rotate.ent_embeddings.weight
+    ent_w.requires_grad = True
+    return optim.AdamW([ent_w], lr=lr_ge, weight_decay=0.0)
 
-    # ---------------- Adapter ----------------
-    adapter = KnowledgeAdapter(
-        in_dim=pretrained_dim,
-        hidden_dim=64,
-        out_dim=128
-    ).to(device)
+# ---- OpenKE loaders/models ----
+test_dataloader = TestDataLoader("/home/naver/MinhPV/sat_rag/OpenKE/benchmarks/FB15K237/", "link")
 
-    # ---------------- Text Encoder ----------------
-    text_encoder = TextEncoderPretrained(entity2text=graph_obj.entity2text).to(device)
-    text_dim = 128  # output dimension after TextEncoder
-    text_adapter = nn.Sequential(
-        nn.Linear(text_dim, 64),
-        nn.ReLU(),
-        nn.Linear(64, 128)
-    ).to(device)
-
-    # ---------------- Dataset ----------------
-    dataset = LocalAlignmentDataset(graph_obj)
-    dataloader = DataLoader(dataset, batch_size=2, shuffle=True, collate_fn=collate_fn)
-    log(f"Dataloader created: {len(dataloader)} batches")
-
-    # =====================================================
-    # Mode 1: Pretrained only
-    # =====================================================
-    log("--- Mode 1: Pretrained only ---")
-    for m in [adapter, text_adapter, text_encoder]:
-        for p in m.parameters():
-            p.requires_grad = False
-
-    metrics = evaluate_retrieval(
-        graph_encoder, text_encoder, graph_obj.test_triples,
-        id2entity=graph_obj.id2entity,
-        entity2id=graph_obj.entity2id,
-        adapter=adapter,        # adapter applied to node embeddings
-        text_adapter=text_adapter,
-        device=device, batch_size=2
+def load_rotate_from_ckpt(ckpt_path):
+    m = RotatE(
+        ent_tot=test_dataloader.get_ent_tot(),
+        rel_tot=test_dataloader.get_rel_tot(),
+        dim=64, margin=12.0, epsilon=2.0
     )
-    log(f"Pretrained metrics: {metrics}")
+    m.load_checkpoint(ckpt_path)
+    return m
 
-    # =====================================================
-    # Mode 2: Train HKA only
-    # =====================================================
-    log("--- Mode 2: Train HKA only ---")
-    for p in adapter.parameters():
-        p.requires_grad = True
-    for p in text_adapter.parameters():
-        p.requires_grad = True
+ckpt = "/home/naver/MinhPV/sat_rag/OpenKE/checkpoint/rotate.ckpt"
 
-    optimizer_hka = optim.Adam(
-        list(adapter.parameters()) + list(text_adapter.parameters()),
-        lr=2e-3
-    )
+results = {}
 
-    train_hka(
-        adapter, graph_encoder, text_encoder, dataloader,
-        optimizer_hka, device=device,
-        text_adapter=text_adapter, id2entity=graph_obj.id2entity,
-        tau=0.07, num_epochs=3, warmup_ratio=0.03,
-        log_interval=10
-    )
+# MODE 1: metric for GE
+log("\n==================== MODE 1: eval_GE(OpenKE Tester) ====================")
+rotate = load_rotate_from_ckpt(ckpt).to(device)
+print("GE entity emb shape:", rotate.ent_embeddings.weight.shape)
+results["mode1_eval_ge"] = eval_openke_linkpred("MODE 1", rotate, test_dataloader, use_gpu=(device=="cuda"))
 
-    metrics = evaluate_retrieval(
-        graph_encoder, text_encoder, graph_obj.test_triples,
-        id2entity=graph_obj.id2entity,
-        entity2id=graph_obj.entity2id,
-        adapter=adapter,
-        text_adapter=text_adapter,
-        device=device, batch_size=2
-    )
-    log(f"HKA only metrics: {metrics}")
+# helper: fresh TE each mode (fair)
+def fresh_te():
+    return TextEncoderPretrained(model_name="prajjwal1/bert-tiny", entity2text=graph_obj.entity2text).to(device)
 
-    # =====================================================
-    # Mode 3: Train Adapter only
-    # =====================================================
-    log("--- Mode 3: Train Adapter only ---")
-    optimizer_adapter = optim.Adam(
-        list(adapter.parameters()) + list(text_adapter.parameters()),
-        lr=2e-3
-    )
+# MODE 2: train TE+GE local
+log("\n==================== MODE 2: train_TE+GE_local ====================")
+rotate = load_rotate_from_ckpt(ckpt).to(device)
+text_encoder = fresh_te()
 
-    train_hka(
-        adapter, graph_encoder, text_encoder, dataloader,
-        optimizer_adapter, device=device,
-        text_adapter=text_adapter, id2entity=graph_obj.id2entity,
-        tau=0.07, num_epochs=3, warmup_ratio=0.03,
-        log_interval=10
-    )
-
-    metrics = evaluate_retrieval(
-        graph_encoder, text_encoder, graph_obj.test_triples,
-        id2entity=graph_obj.id2entity,
-        entity2id=graph_obj.entity2id,
-        adapter=adapter,
-        text_adapter=text_adapter,
-        device=device, batch_size=2
-    )
-    log(f"Adapter only metrics: {metrics}")
-
-    # =====================================================
-    # Mode 4: Train HKA + Adapter + Text Encoder
-    # =====================================================
-    log("--- Mode 4: Train HKA + Adapter + Text Encoder ---")
-    for p in text_encoder.parameters():
-        p.requires_grad = True
-    for p in adapter.parameters():
-        p.requires_grad = True
-    for p in text_adapter.parameters():
-        p.requires_grad = True
-
-    optimizer_all = optim.Adam(
-        list(text_encoder.parameters()) +
-        list(adapter.parameters()) +
-        list(text_adapter.parameters()), lr=2e-3
-    )
-
-    train_hka(
-        adapter, graph_encoder, text_encoder, dataloader,
-        optimizer_all, device=device,
-        text_adapter=text_adapter, id2entity=graph_obj.id2entity,
-        tau=0.07, num_epochs=3, warmup_ratio=0.03,
-        log_interval=10
-    )
-
-    metrics = evaluate_retrieval(
-        graph_encoder, text_encoder, graph_obj.test_triples,
-        id2entity=graph_obj.id2entity,
-        entity2id=graph_obj.entity2id,
-        adapter=adapter,
-        text_adapter=text_adapter,
-        device=device, batch_size=2
-    )
-    log(f"HKA + Adapter + Text metrics: {metrics}")
+print("GE entity emb shape:", rotate.ent_embeddings.weight.shape)
+print("TE hidden size:", text_encoder.hidden_size)
 
 
-if __name__ == "__main__":
-    main()
+opt = make_opt_joint(rotate, text_encoder, lr_ge=1e-4, lr_te=2e-6)
+train_hka_joint(rotate, text_encoder, dataloader, opt, device=device,
+                epochs_local=3, epochs_global=0, train_te=True, train_ge=True,
+                grad_accum_steps=grad_accum_steps, doc_max_length=doc_max_length)
+results["mode2_tege_local"] = eval_openke_linkpred("MODE 2", rotate, test_dataloader, use_gpu=(device=="cuda"))
+
+# MODE 3: train TE+GE (GE only) local
+log("\n==================== MODE 3: train_GE_only_local ====================")
+rotate = load_rotate_from_ckpt(ckpt).to(device)
+text_encoder = fresh_te()  # sẽ bị freeze trong trainer vì train_te=False
+opt = make_opt_ge_only_entity(rotate, lr_ge=1e-4)   # hoặc make_opt_ge_only_all
+train_hka_joint(rotate, text_encoder, dataloader, opt, device=device,
+                epochs_local=3, epochs_global=0, train_te=False, train_ge=True,
+                grad_accum_steps=grad_accum_steps, doc_max_length=doc_max_length)
+results["mode3_geonly_local"] = eval_openke_linkpred("MODE 3", rotate, test_dataloader, use_gpu=(device=="cuda"))
+
+# MODE 4: train TE+GE global
+log("\n==================== MODE 4: train_TE+GE_global ====================")
+rotate = load_rotate_from_ckpt(ckpt).to(device)
+text_encoder = fresh_te()
+opt = make_opt_joint(rotate, text_encoder, lr_ge=1e-4, lr_te=2e-6)
+train_hka_joint(rotate, text_encoder, dataloader, opt, device=device,
+                epochs_local=0, epochs_global=3, train_te=True, train_ge=True,
+                grad_accum_steps=grad_accum_steps, doc_max_length=doc_max_length)
+results["mode4_tege_global"] = eval_openke_linkpred("MODE 4", rotate, test_dataloader, use_gpu=(device=="cuda"))
+
+# MODE 5: train TE+GE (GE only) global
+log("\n==================== MODE 5: train_GE_only_global ====================")
+rotate = load_rotate_from_ckpt(ckpt).to(device)
+text_encoder = fresh_te()
+opt = make_opt_ge_only_entity(rotate, lr_ge=1e-4)
+train_hka_joint(rotate, text_encoder, dataloader, opt, device=device,
+                epochs_local=0, epochs_global=3, train_te=False, train_ge=True,
+                grad_accum_steps=grad_accum_steps, doc_max_length=doc_max_length)
+results["mode5_geonly_global"] = eval_openke_linkpred("MODE 5", rotate, test_dataloader, use_gpu=(device=="cuda"))
+
+# MODE 6: train TE+GE HKA
+log("\n==================== MODE 6: train_TE+GE_HKA ====================")
+rotate = load_rotate_from_ckpt(ckpt).to(device)
+text_encoder = fresh_te()
+opt = make_opt_joint(rotate, text_encoder, lr_ge=1e-4, lr_te=2e-6)
+train_hka_joint(rotate, text_encoder, dataloader, opt, device=device,
+                epochs_local=2, epochs_global=1, train_te=True, train_ge=True,
+                grad_accum_steps=grad_accum_steps, doc_max_length=doc_max_length)
+results["mode6_tege_hka"] = eval_openke_linkpred("MODE 6", rotate, test_dataloader, use_gpu=(device=="cuda"))
+
+# MODE 7: train TE+GE (GE only) HKA
+log("\n==================== MODE 7: train_GE_only_HKA ====================")
+rotate = load_rotate_from_ckpt(ckpt).to(device)
+text_encoder = fresh_te()
+opt = make_opt_ge_only_entity(rotate, lr_ge=1e-4)
+train_hka_joint(rotate, text_encoder, dataloader, opt, device=device,
+                epochs_local=2, epochs_global=1, train_te=False, train_ge=True,
+                grad_accum_steps=grad_accum_steps, doc_max_length=doc_max_length)
+results["mode7_geonly_hka"] = eval_openke_linkpred("MODE 7", rotate, test_dataloader, use_gpu=(device=="cuda"))
+
+log("\n==================== SUMMARY ====================")
+for k, v in results.items():
+    log(f"{k}: {v}")
